@@ -13,6 +13,14 @@ export function slugify(text: string): string {
     .replace(/[^\w ]+/g, "")  // remove non-word chars
     .replace(/\s+/g, "-");    // replace spaces with hyphens
 }
-
 // How to use AWS! --> how-to-use-aws
 
+// format date
+
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  }).format(date)
+}

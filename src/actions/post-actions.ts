@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { postsTable } from "@/lib/db/schema"
 import { slugify } from "@/lib/utils"
-import { eq } from "drizzle-orm"
+import { and, eq, ne } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 
@@ -61,6 +61,7 @@ export async function createPost(formData: FormData) {
         }
 
     } catch (e) {
+        console.log("Error while creating", e)
         return {
             success: false,
             message: "Error occured while creating the post.",
@@ -68,4 +69,65 @@ export async function createPost(formData: FormData) {
         }
     }
 
+}
+
+export async function updatePost(postId: number, formData: FormData) {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        })
+        if (!session || !session.user) {
+            return {
+                success: false,
+                message: "You must logged in to edit a post."
+            }
+        }
+
+        const title = await formData.get("title") as string
+        const description = await formData.get("description") as string
+        const content = await formData.get("content") as string
+
+        const slug = slugify(title)
+        const existingPost = await db.query.postsTable.findFirst({
+            where: and(eq(postsTable.slug, slug), ne(postsTable.id, postId))  // postsTable.slug === slug && postsTable.id !== postId
+        })
+
+        if (existingPost) {
+            return {
+                success: false,
+                message: "A post with the same title already exists!"
+            }
+        }
+
+        const post = await db.query.postsTable.findFirst({
+            where: eq(postsTable.id, postId)
+        })
+        if (post?.authorId !== session.user.id) {
+            return {
+                success: false,
+                message: "You can only edit your own posts!"
+            }
+        }
+
+        await db.update(postsTable).set({
+            title, description, content, slug, updatedAt: new Date()
+        }).where(eq(postsTable.id, postId))
+
+        revalidatePath("/")
+        revalidatePath(`/post/${slug}`)
+        revalidatePath(`/profile`)
+
+        return {
+            success: true,
+            message: "Post updated successfully.",
+            slug
+        }
+    } catch (e) {
+        console.log("Error while updating", e)
+        return {
+            success: false,
+            message: "Error occured while updating the post.",
+            error: e
+        }
+    }
 }

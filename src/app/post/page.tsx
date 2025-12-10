@@ -15,7 +15,7 @@ export default function Posts() {
             )
     })
     console.log(data)
-    if(error) return <h1>Error while loading posts</h1>
+    if(error || !data) return <h1>Error while loading posts</h1>
     if(isPending) return <h1>Loading...</h1>
 
     return (

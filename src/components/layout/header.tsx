@@ -14,7 +14,7 @@ const navItems = [
     },
     {
         title: "Create",
-        href: 'post/create'
+        href: '/post/create'
     },
 ]
 
