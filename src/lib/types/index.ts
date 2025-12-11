@@ -40,7 +40,7 @@ export interface PostContentProps {
     isAuthor: boolean
 }
 
-export interface PostDeleteProps {
+export interface PostDeleteButtonProps {
     postId: number
 }
 
@@ -52,5 +52,14 @@ export interface PostFormProps {
         description: string
         content: string
         slug: string
+    }
+}
+
+export interface UserInfoProps {
+    user: {
+        name: string,
+        email: string,
+        createdAt: Date,
+        updatedAt: Date
     }
 }

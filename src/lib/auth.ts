@@ -17,6 +17,11 @@ export const auth = betterAuth({
             session: schema.sessionsTable,
         }
     }),
+    user: {
+        changeEmail: {
+            enabled: true,
+        }
+    },
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,

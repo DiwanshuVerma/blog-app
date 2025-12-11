@@ -1,12 +1,8 @@
-
-// get all posts
-
-import { headers } from "next/headers";
 import { db } from ".";
-import { auth } from "../auth";
 import { desc, eq } from "drizzle-orm";
 import { postsTable } from "./schema";
 
+// get all posts
 export async function getAllPosts() {
     try {
         const res = await db.query.postsTable.findMany({

@@ -131,3 +131,38 @@ export async function updatePost(postId: number, formData: FormData) {
         }
     }
 }
+
+export async function deletePost(postId: number) {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        })
+        if (!session || !session.user) {
+            return {
+                success: false,
+                message: "You must be logged in to delete post!"
+            }
+        }
+
+        const postToDelete = await db.query.postsTable.findFirst({
+            where: eq(postsTable.id, postId)
+        })
+        if (postToDelete?.authorId !== session.user.id) {
+            return {
+                success: false,
+                message: "You can only delete your own post!"
+            }
+        }
+
+        await db.delete(postsTable).where(eq(postsTable.id, postId))
+        revalidatePath("/")
+        revalidatePath("/profile")
+        return {
+            success: true,
+            message: "Post deleted successfully."
+        }
+    } catch (error) {
+        console.log("Error while deleting -> ", error)
+        return null
+    }
+}
