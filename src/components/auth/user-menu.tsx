@@ -33,13 +33,13 @@ export function UserMenu({ user }: UserMenuProps) {
             await signOut({
                 fetchOptions: {
                     onSuccess: () => {
-                        toast("Logged out successfully!")
+                        toast.success("Logged out successfully!")
                         router.refresh()
                     }
                 }
             })
         } catch (error) {
-            toast("Failed to log out. Try again later.")
+            toast.error("Failed to log out. Try again later.")
         } finally {
             setIsLoading(false)
         }

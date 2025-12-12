@@ -1,10 +1,6 @@
 import { UserInfo } from "@/components/profile/user-info"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { auth } from "@/lib/auth"
-import { Pencil, PlusCircle } from "lucide-react"
 import { headers } from "next/headers"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function Profile() {

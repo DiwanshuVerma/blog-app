@@ -7,15 +7,11 @@ import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
-import { startTransition, useState } from "react";
+import { useState } from "react";
 import { createPost, updatePost } from "@/actions/post-actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { PostFormProps } from "@/lib/types";
-import { slugify } from "@/lib/utils";
-import { db } from "@/lib/db";
-import { eq } from "drizzle-orm";
-import { postsTable } from "@/lib/db/schema";
 
 // post form schema for form validation
 const postSchema = z.object({
@@ -58,26 +54,26 @@ export default function PostForm({ isEditing, post }: PostFormProps) {
         try {
             if (isEditing) {
                 if (!post?.id) {
-                    toast("Missing post id for update.")
+                    toast.error("Missing post id for update.")
                     return;
                 }
                 const res = await updatePost(post.id, formData)
                 if (res.success) {
-                    toast(res.message)
+                    toast.success(res.message)
                     router.push("/")
                 }
-                else toast(res.message || "Failed to update post!")
+                else toast.error(res.message || "Failed to update post!")
 
             } else {
                 const res = await createPost(formData)
                 if (res.success) {
-                    toast("Post created successfully.")
+                    toast.success("Post created successfully.")
                     router.push("/")
                 }
-                else toast(res.message || "Failed to create post!")
+                else toast.error(res.message || "Failed to create post!")
             }
         } catch (error) {
-            toast(isEditing ? "Failed to edit the post." : "Failed to create post")
+            toast.error(isEditing ? "Failed to edit the post." : "Failed to create post")
         } finally {
             setSubmitting(false)
         }

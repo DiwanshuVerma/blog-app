@@ -61,7 +61,6 @@ export async function createPost(formData: FormData) {
         }
 
     } catch (e) {
-        console.log("Error while creating", e)
         return {
             success: false,
             message: "Error occured while creating the post.",
@@ -123,7 +122,6 @@ export async function updatePost(postId: number, formData: FormData) {
             slug
         }
     } catch (e) {
-        console.log("Error while updating", e)
         return {
             success: false,
             message: "Error occured while updating the post.",
@@ -162,7 +160,10 @@ export async function deletePost(postId: number) {
             message: "Post deleted successfully."
         }
     } catch (error) {
-        console.log("Error while deleting -> ", error)
-        return null
+        return {
+            success: false,
+            message: "Error while deleting the post!",
+            error
+        }
     }
 }

@@ -37,13 +37,13 @@ export default function LoginForm() {
                 password: values.password
             })
             if (error) {
-                toast(error.message)
+                toast.error(error.message)
                 return
             }
-            toast("Login Success")
+            toast.success("Login Success")
             router.push("/posts")
         } catch (error) {
-            console.error("Error while submitting the login form: ", error)
+                toast.error("Error occured, try again later!")
         } finally {
             setIsLoading(false)
         }

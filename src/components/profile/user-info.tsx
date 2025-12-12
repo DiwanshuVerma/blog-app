@@ -46,7 +46,6 @@ export function UserInfo({ user }: UserInfoProps) {
     const handleSave = async (values: UpdateFormValue) => {
         setIsSaving(true)
         try {
-            console.log(values)
             const promises: Promise<any>[] = [
                 updateUser({ name: values.name })
             ]

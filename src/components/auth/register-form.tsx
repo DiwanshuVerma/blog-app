@@ -50,15 +50,15 @@ export default function RegisterForm({ onSuccess }: onRegisterSubmitProps) {
             })
 
             if (error) {
-                toast(error.message)
+                toast.error(error.message)
                 return
             }
-            toast("Account created successfully. Login with same email & password")
+            toast.success("Account created successfully. Login with same email & password")
 
             if (onSuccess) onSuccess()
 
         } catch (error) {
-            console.error("Error while submitting the register form: ", error)
+            toast.error("Error occured, try again!")
         } finally {
             setIsLoading(false)
         }
